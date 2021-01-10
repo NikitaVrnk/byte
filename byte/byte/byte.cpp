@@ -1,19 +1,30 @@
 ﻿#include <iostream>//Для работы с клавиатурой
 #include <fstream>//Для работы с файлами
+#include <bitset>
 
 #define FLOAT_ARRAY_SIZE 5
 #define OUTPUT_INT_ARRAY_SIZE 10
 
+// опции флагов
+#define  FLAG_option_1  0
+#define  FLAG_option_2  1
+#define  FLAG_option_3  2
+#define  FLAG_option_4  3
+#define  FLAG_option_5  4
+#define  FLAG_option_6  5
+#define  FLAG_option_7  6
+#define  FLAG_option_8  7
+
 struct Msg {
-	uint64_t mask = 0xAAAAAAAAAAAAAAAA;
-	//int8_t _flag : 1;
+	std::bitset<64> mask = 0xAAAAAAAAAAAAAAAA;
+	//uint64_t mask = 0xAAAAAAAAAAAAAAAA;
+	//uint8_t _flag = FLAG_option_1; //битовый флаг шестнадцатиричный литерал 0000 0001
+	std::bitset<8> bitsFLAG = FLAG_option_8; //8 бит
 	int32_t id = 2111111111;
 	int32_t n = 1999999999;
 
 	float arrayMSG[FLOAT_ARRAY_SIZE] = { 0.0, 1.1, 2.2,3.3,4.4 };
 };
-
-
 
 //запись структуры в массив
 int struct2Array(Msg *msg, int32_t *arrMsg, uint32_t size) {
@@ -74,36 +85,34 @@ int arr2File(int32_t *arrMsg, uint32_t size, std::string fileName) {
 	return 0;
 };
 
-
 //вывод массива из файла
 int file2Arr(std::string fileName, int32_t *arrMsg, uint32_t size) {
 
-	std::ofstream file;
-	file.open(fileName, std::ios::binary);
-
+	std::ifstream file;
+	file.open(fileName, std::ios::in || std::ios::binary);
 	int8_t* ptr_arrMsg = (int8_t*)arrMsg;
 	size_t sz_arrMsg = sizeof(*arrMsg) * size;
 
 	for (size_t i = 0; i < sz_arrMsg; i++) {
-		//
+		file.read((char*)ptr_arrMsg, sz_arrMsg);
+
+	
 	}
 
 	file.close();
-
 	return 0;
-
 };
 
 int main()
 {
 	setlocale(LC_ALL, "Rus");
 
-
 	int32_t arrMsg[OUTPUT_INT_ARRAY_SIZE] = {1999999999};
 	int32_t arrMsgInput[OUTPUT_INT_ARRAY_SIZE] = {};
 
 	Msg msg0;
 	Msg msg1 = {
+		0,
 		0,
 		0,
 		0,
@@ -124,6 +133,7 @@ int main()
 
 
 	std::cout << " " << std::endl;
+
 
 
 
